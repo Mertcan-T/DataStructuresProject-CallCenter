@@ -1,0 +1,22 @@
+﻿@model dynamic
+
+<h2>Temsilci Girişi</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>Kullanıcı Adı:</label>
+        <input type="text" name="kullaniciAdi" required />
+    </div>
+    <div>
+        <label>Şifre:</label>
+        <input type="password" name="sifre" required />
+    </div>
+    <div>
+        <button type="submit">Giriş Yap</button>
+    </div>
+
+    @if (ViewBag.Hata != null)
+    {
+        <p style="color:red;">@ViewBag.Hata</p>
+    }
+</form>

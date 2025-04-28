@@ -1,0 +1,34 @@
+﻿@model IEnumerable<CallCenterSimulation.Models.Customer>
+
+@{
+    ViewBag.Title = "Temsilci Paneli";
+}
+
+<h2>Bekleyen Müşteriler</h2>
+
+@if (!Model.Any())
+{
+    <p>Şu anda bekleyen müşteri yok.</p>
+}
+else
+{
+    <table border="1">
+        <tr>
+            <th>Ad</th>
+            <th>Talep</th>
+            <th>Sıra Numarası</th>
+        </tr>
+        @foreach (var musteri in Model)
+        {
+            <tr>
+                <td>@musteri.Ad</td>
+                <td>@musteri.Talep</td>
+                <td>@musteri.SiraNumarasi</td>
+            </tr>
+        }
+    </table>
+
+    <form method="post" asp-action="ServeCustomer">
+        <button type="submit">Sıradaki Müşteriye Hizmet Ver</button>
+    </form>
+}

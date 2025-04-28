@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Müşteri Talep Formu";
+}
+
+<h2>Müşteri Talep Formu</h2>
+
+<form asp-controller="Customer" asp-action="Create" method="post">
+    <div>
+        <label>Adınız:</label>
+        <input type="text" name="Ad" required />
+    </div>
+    <div>
+        <label>Talebiniz:</label>
+        <input type="text" name="Talep" required />
+    </div>
+    <div>
+        <button type="submit">Talep Gönder</button>
+    </div>
+</form>

@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Müşteri Talep Oluştur";
+}
+
+<h2>Talep Oluştur</h2>
+
+<form method="post" asp-action="Create">
+    <div>
+        <label>Adınız:</label>
+        <input type="text" name="ad" required />
+    </div>
+    <div>
+        <label>Talebiniz:</label>
+        <input type="text" name="talep" required />
+    </div>
+    <div>
+        <button type="submit">Talep Gönder</button>
+    </div>
+</form>
+
+@if (ViewBag.Basarili != null)
+{
+    <p style="color:green;">@ViewBag.Basarili</p>
+}
+
+@if (ViewBag.Hata != null)
+{
+    <p style="color:red;">@ViewBag.Hata</p>
+}
