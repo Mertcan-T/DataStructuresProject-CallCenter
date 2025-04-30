@@ -100,5 +100,24 @@ namespace CallCenterSimulation.Models
             }
             return liste;
         }
+        // Verilen müşterinin sıra numarasını (indeksini) döner (1'den başlar)
+        public int SiraNumarasiniGetir(T veri)
+        {
+            int sira = 1;
+            Eleman<T> temp = bas;
+
+            while (temp != null)
+            {
+                if (temp.Veri.Equals(veri))
+                {
+                    return sira;
+                }
+                sira++;
+                temp = temp.Ileri;
+            }
+
+            return -1; // Bulunamadıysa
+        }
+
     }
 }

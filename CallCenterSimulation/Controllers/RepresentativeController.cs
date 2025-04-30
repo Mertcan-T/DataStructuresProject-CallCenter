@@ -1,12 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CallCenterSimulation.Models;
+using CallCenterSimulation.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CallCenterSimulation.Controllers
 {
     public class RepresentativeController : Controller
     {
-        private const string KullaniciAdi = "temsilci";
-        private const string Sifre = "1234";
+        private readonly IHubContext<CallCenterHub> _hubContext;
+
+        public RepresentativeController(IHubContext<CallCenterHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
 
         public IActionResult Login()
         {
@@ -16,16 +22,11 @@ namespace CallCenterSimulation.Controllers
         [HttpPost]
         public IActionResult Login(string kullaniciAdi, string sifre)
         {
-            if (kullaniciAdi == KullaniciAdi && sifre == Sifre)
-            {
-                // Giriş başarılı
+            if (kullaniciAdi == "temsilci" && sifre == "1234")
                 return RedirectToAction("Dashboard");
-            }
-            else
-            {
-                ViewBag.Hata = "Kullanıcı adı veya şifre yanlış!";
-                return View();
-            }
+
+            ViewBag.Hata = "Kullanıcı adı veya şifre yanlış!";
+            return View();
         }
 
         public IActionResult Dashboard()
@@ -35,11 +36,14 @@ namespace CallCenterSimulation.Controllers
         }
 
         [HttpPost]
-        public IActionResult ServeCustomer()
+        public async Task<IActionResult> ServeCustomer()
         {
             if (!DataStore.MusteriKuyrugu.KuyrukBos())
             {
-                DataStore.MusteriKuyrugu.KuyrukSil();
+                var silinen = DataStore.MusteriKuyrugu.KuyrukSil();
+
+                // Tüm istemcilere sıranın değiştiğini bildir
+                await _hubContext.Clients.All.SendAsync("UpdateQueue");
             }
 
             return RedirectToAction("Dashboard");

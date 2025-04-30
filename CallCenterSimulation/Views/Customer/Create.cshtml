@@ -1,4 +1,6 @@
-﻿@{
+﻿@model CallCenterSimulation.Models.Customer
+
+@{
     ViewBag.Title = "Müşteri Talep Oluştur";
 }
 
@@ -7,23 +9,32 @@
 <form method="post" asp-action="Create">
     <div>
         <label>Adınız:</label>
-        <input type="text" name="ad" required />
+        <input asp-for="Ad" />
+        <span asp-validation-for="Ad" style="color:red"></span>
     </div>
     <div>
         <label>Talebiniz:</label>
-        <input type="text" name="talep" required />
+        <input asp-for="Talep" />
+        <span asp-validation-for="Talep" style="color:red"></span>
     </div>
     <div>
         <button type="submit">Talep Gönder</button>
     </div>
 </form>
 
-@if (ViewBag.Basarili != null)
-{
-    <p style="color:green;">@ViewBag.Basarili</p>
-}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 
-@if (ViewBag.Hata != null)
-{
-    <p style="color:red;">@ViewBag.Hata</p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/callCenterHub")
+            .build();
+
+        connection.on("QueueUpdated", () => {
+            location.reload();
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
 }

@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Talep Başarılı";
+    var ad = TempData["Ad"]?.ToString();
+}
+
+<h2>Talebiniz başarıyla alınmıştır</h2>
+<p id="sira">Sıra numaranız hesaplanıyor...</p>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const customerName = "@ad";
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/callCenterHub")
+            .build();
+
+        async function getQueuePosition() {
+            const response = await fetch('/api/queue/position?name=' + encodeURIComponent(customerName));
+            const result = await response.text();
+            document.getElementById("sira").innerText = "Sıra numaranız: " + result;
+        }
+
+        connection.on("UpdateQueue", () => {
+            getQueuePosition();
+        });
+
+        connection.start().then(() => {
+            getQueuePosition();
+        });
+    </script>
+}

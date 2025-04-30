@@ -1,34 +1,56 @@
 ﻿@model IEnumerable<CallCenterSimulation.Models.Customer>
 
 @{
-    ViewBag.Title = "Temsilci Paneli";
+    ViewData["Title"] = "Temsilci Paneli";
 }
 
-<h2>Bekleyen Müşteriler</h2>
+<h2>Temsilci Paneli</h2>
 
 @if (!Model.Any())
 {
-    <p>Şu anda bekleyen müşteri yok.</p>
+    <p>Bekleyen müşteri yok.</p>
 }
 else
 {
-    <table border="1">
-        <tr>
-            <th>Ad</th>
-            <th>Talep</th>
-            <th>Sıra Numarası</th>
-        </tr>
-        @foreach (var musteri in Model)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>@musteri.Ad</td>
-                <td>@musteri.Talep</td>
-                <td>@musteri.SiraNumarasi</td>
+                <th>Ad</th>
+                <th>Talep</th>
+                <th>Sıra Numarası</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var musteri in Model)
+            {
+                <tr>
+                    <td>@musteri.Ad</td>
+                    <td>@musteri.Talep</td>
+                    <td>@musteri.SiraNumarasi</td>
+                </tr>
+            }
+        </tbody>
     </table>
 
-    <form method="post" asp-action="ServeCustomer">
-        <button type="submit">Sıradaki Müşteriye Hizmet Ver</button>
+    <form asp-action="ServeCustomer" method="post">
+        <button type="submit" class="btn btn-danger">Sıradaki Müşteriyi Çağır</button>
     </form>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/callCenterHub")
+            .build();
+
+        connection.on("ReceiveRequest", function (ad, talep) {
+            alert("Yeni müşteri talebi geldi: " + ad + " - " + talep);
+            location.reload(); // Sayfayı yenile
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
 }

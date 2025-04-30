@@ -1,23 +1,24 @@
 using CallCenterSimulation.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using CallCenterSimulation.Hubs; // SignalR Hub'ý kullanacaðýmýz için ekledik
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Veritabaný baðlantýsýný yapýlandýr
+// Veritabaný baðlantýsýný yapýlandýr (þu anda kullanmasan bile dursun istiyorsan)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity yapýlandýrmasýný ekle
+// Identity yapýlandýrmasýný ekle (þu anda kullanmýyorsun, istersen sonra kaldýrýrýz)
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// SignalR'ý yapýlandýr
-builder.Services.AddSignalR();
-
 // MVC'yi ekle
 builder.Services.AddControllersWithViews();
+
+// SignalR'ý ekle (sadece bir kez!)
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -43,7 +44,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 // SignalR Hub yönlendirmesini yap
-app.MapHub<CallCenterHub>("/callCenterHub");
+app.MapHub<CallCenterHub>("/callCenterHub"); // Burasý SignalR baðlantýsý için önemli!
 
 // MVC routing yapýlandýrmasý
 app.MapControllerRoute(
