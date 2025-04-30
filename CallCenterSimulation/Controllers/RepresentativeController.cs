@@ -42,7 +42,10 @@ namespace CallCenterSimulation.Controllers
             {
                 var silinen = DataStore.MusteriKuyrugu.KuyrukSil();
 
-                // Tüm istemcilere sıranın değiştiğini bildir
+                // 1️⃣ Çağırılan müşteriye özel mesaj gönder
+                await _hubContext.Clients.All.SendAsync("ReceiveResponse", silinen.Ad, "Talebiniz temsilci tarafından işleniyor.");
+
+                // 2️⃣ Tüm istemcilere sıra güncelleme bildirimi
                 await _hubContext.Clients.All.SendAsync("UpdateQueue");
             }
 
