@@ -4,29 +4,61 @@
 }
 
 <h2>Talebiniz başarıyla alınmıştır</h2>
+
 <p id="sira">Sıra numaranız hesaplanıyor...</p>
+<div id="mesajAlani" class="alert alert-info mt-3"></div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
-        const customerName = "@ad";
+        const kullaniciAd = "@ad";
 
+        // Hub bağlantısını başlat
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/callCenterHub")
+            .withAutomaticReconnect() // Bağlantı koparsa yeniden bağlanmayı dene
             .build();
 
+        // Kullanıcının sıra numarasını sunucudan al
         async function getQueuePosition() {
-            const response = await fetch('/api/queue/position?name=' + encodeURIComponent(customerName));
-            const result = await response.text();
-            document.getElementById("sira").innerText = "Sıra numaranız: " + result;
+            if (!kullaniciAd) return;
+
+            try {
+                const response = await fetch('/api/queue/position?name=' + encodeURIComponent(kullaniciAd));
+                if (response.ok) {
+                    const result = await response.text();
+                    document.getElementById("sira").innerText = "Sıra numaranız: " + result;
+                } else {
+                    document.getElementById("sira").innerText = "Sıra numaranız alınamadı.";
+                }
+            } catch (err) {
+                console.error("Sıra alınırken hata:", err);
+                document.getElementById("sira").innerText = "Sıra numaranız alınamadı.";
+            }
         }
 
+        // SignalR'dan gelen kuyruk güncellemesini dinle
         connection.on("UpdateQueue", () => {
             getQueuePosition();
         });
 
+        // Müşteriye özel yanıt alındığında çalışır
+        connection.on("ReceiveResponse", function (ad, mesaj) {
+            if (ad === kullaniciAd) {
+                const mesajAlani = document.getElementById("mesajAlani");
+                mesajAlani.innerText = mesaj;
+
+                if (mesaj.includes("tamamlandı")) {
+                    setTimeout(() => {
+                        mesajAlani.innerHTML += "<br><strong>Lütfen memnuniyet formunu doldurun.</strong>";
+                    }, 3000);
+                }
+            }
+        });
+
+        // Bağlantıyı başlat ve sıra numarasını al
         connection.start().then(() => {
             getQueuePosition();
-        });
+        }).catch(err => console.error("SignalR bağlantı hatası:", err));
     </script>
 }

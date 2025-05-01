@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using CallCenterSimulation.Models;
 using CallCenterSimulation.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CallCenterSimulation.Controllers
 {
@@ -14,39 +14,54 @@ namespace CallCenterSimulation.Controllers
             _hubContext = hubContext;
         }
 
-        // Talep oluşturma formu
-        public IActionResult Create()
+        // Müşteri formu
+        public IActionResult Index()
         {
             return View();
         }
 
-        // Talep gönderildiğinde çalışır
+        // Müşteri talep gönderme işlemi
         [HttpPost]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create(string ad, string talep)
         {
-            if (ModelState.IsValid)
-            {
-                // Sıra numarasını belirle ve sıraya ekle
-                customer.SiraNumarasi = DataStore.MusteriKuyrugu.ElemanSayisi() + 1;
-                DataStore.MusteriKuyrugu.KuyrugaEkle(customer);
+            var musteri = new Customer { Ad = ad, Talep = talep };
 
-                // SignalR üzerinden temsilcilere bildir
-                await _hubContext.Clients.All.SendAsync("ReceiveRequest", customer.Ad, customer.Talep);
+            // Kuyruğa ekle
+            DataStore.MusteriKuyrugu.KuyrugaEkle(musteri);
 
-                // Müşteri adını Success sayfasına TempData ile aktar
-                TempData["Ad"] = customer.Ad;
+            // Aktif müşterilere ekle (Dictionary)
+            DataStore.AktifMusteriler[ad.GetHashCode()] = musteri;
 
-                // Success sayfasına yönlendir
-                return RedirectToAction("Success");
-            }
+            // Kuyruk güncellendiğini tüm istemcilere bildir
+            await _hubContext.Clients.All.SendAsync("UpdateQueue");
 
-            return View(customer);
+            // TempData ile ad bilgisini Success sayfasına taşı
+            TempData["Ad"] = ad;
+
+            return RedirectToAction("Success");
         }
 
-        // Talep başarılı sayfası
+        // Talep başarıyla alındı sayfası
         public IActionResult Success()
         {
             return View();
+        }
+
+        // Müşteri geri bildirim gönderir
+        [HttpPost]
+        public IActionResult GeriBildirim(string ad, int puan)
+        {
+            DataStore.TemsilciLoglari.AddLast($"{DateTime.Now}: {ad} adlı müşteri {puan} puan verdi.");
+            TempData["GeriBildirildi"] = "Geri bildiriminiz için teşekkür ederiz!";
+            return RedirectToAction("Index");
+        }
+
+        // Cevap alınması için SignalR dinleyici ekliyoruz
+        [HttpPost]
+        public IActionResult ReceiveCustomerAnswer(string ad, string cevap)
+        {
+            TempData["TemsilciCevabi"] = cevap;
+            return RedirectToAction("Success");
         }
     }
 }

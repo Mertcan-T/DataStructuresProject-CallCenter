@@ -1,18 +1,18 @@
-﻿@model IEnumerable<CallCenterSimulation.Models.Customer>
+﻿@model CallCenterSimulation.Models.DashboardViewModel
 
 @{
     ViewData["Title"] = "Temsilci Paneli";
 }
 
-<h2>Temsilci Paneli</h2>
+<h2>Bekleyen Müşteriler</h2>
 
-@if (!Model.Any())
+@if (!Model.BekleyenMusteriler.Any())
 {
     <p>Bekleyen müşteri yok.</p>
 }
 else
 {
-    <table class="table">
+    <table class="table" id="musteriTable">
         <thead>
             <tr>
                 <th>Ad</th>
@@ -21,7 +21,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var musteri in Model)
+            @foreach (var musteri in Model.BekleyenMusteriler)
             {
                 <tr>
                     <td>@musteri.Ad</td>
@@ -37,6 +37,22 @@ else
     </form>
 }
 
+<h2 class="mt-5">Tamamlanan Müşteriler</h2>
+
+@if (!Model.TamamlananMusteriler.Any())
+{
+    <p>Henüz tamamlanan müşteri yok.</p>
+}
+else
+{
+    <ul>
+        @foreach (var log in Model.TamamlananMusteriler)
+        {
+            <li>@log.Ad</li>
+        }
+    </ul>
+}
+
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
     <script>
@@ -44,9 +60,14 @@ else
             .withUrl("/callCenterHub")
             .build();
 
-        connection.on("ReceiveRequest", function (ad, talep) {
-            alert("Yeni müşteri talebi geldi: " + ad + " - " + talep);
-            location.reload(); // Sayfayı yenile
+        connection.on("ReceiveRequest", function (ad, talep, siraNumarasi) {
+            const table = document.getElementById("musteriTable").getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            newRow.innerHTML = `<td>${ad}</td><td>${talep}</td><td>${siraNumarasi}</td>`;
+        });
+
+        connection.on("UpdateQueue", function () {
+            location.reload();
         });
 
         connection.start().catch(function (err) {

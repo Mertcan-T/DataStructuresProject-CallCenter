@@ -7,7 +7,7 @@ namespace CallCenterSimulation.Models
     public class Eleman<T>
     {
         public T Veri;            // Veri tutacak
-        public Eleman<T> Ileri;    // Sonraki elemana işaret eder
+        public Eleman<T> Ileri;   // Sonraki elemana işaret eder
 
         public Eleman(T veri)
         {
@@ -21,11 +21,13 @@ namespace CallCenterSimulation.Models
     {
         private Eleman<T> bas; // Kuyruğun başı
         private Eleman<T> son; // Kuyruğun sonu
+        private int elemanSayisi; // Kuyruğun eleman sayısını takip eden sayaç
 
         public Kuyruk()
         {
             bas = null;
             son = null;
+            elemanSayisi = 0;
         }
 
         // Kuyruk boş mu?
@@ -49,6 +51,8 @@ namespace CallCenterSimulation.Models
                 son.Ileri = yeni;
                 son = yeni;
             }
+
+            elemanSayisi++; // Sayaç güncelleniyor
         }
 
         // Kuyruktan eleman çıkar (Baştan çıkarılır)
@@ -63,6 +67,7 @@ namespace CallCenterSimulation.Models
             if (bas == null) // Eğer kuyruk tamamen boşaldıysa
                 son = null;
 
+            elemanSayisi--; // Sayaç güncelleniyor
             return sonuc.Veri;
         }
 
@@ -78,14 +83,7 @@ namespace CallCenterSimulation.Models
         // Kuyruktaki eleman sayısı
         public int ElemanSayisi()
         {
-            int sayac = 0;
-            Eleman<T> temp = bas;
-            while (temp != null)
-            {
-                sayac++;
-                temp = temp.Ileri;
-            }
-            return sayac;
+            return elemanSayisi; // Artık O(1) zaman karmaşıklığı ile çalışır
         }
 
         // Kuyruktaki tüm elemanları liste olarak döner
@@ -100,6 +98,7 @@ namespace CallCenterSimulation.Models
             }
             return liste;
         }
+
         // Verilen müşterinin sıra numarasını (indeksini) döner (1'den başlar)
         public int SiraNumarasiniGetir(T veri)
         {
@@ -118,6 +117,5 @@ namespace CallCenterSimulation.Models
 
             return -1; // Bulunamadıysa
         }
-
     }
 }
