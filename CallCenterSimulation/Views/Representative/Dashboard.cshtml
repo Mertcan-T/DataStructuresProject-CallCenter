@@ -17,7 +17,8 @@ else
             <tr>
                 <th>Ad</th>
                 <th>Talep</th>
-                <th>Sıra Numarası</th>
+                <th>Sıra</th>
+                <th>Yanıt</th>
             </tr>
         </thead>
         <tbody>
@@ -27,14 +28,17 @@ else
                     <td>@musteri.Ad</td>
                     <td>@musteri.Talep</td>
                     <td>@musteri.SiraNumarasi</td>
+                    <td>
+                        <form asp-action="YanitGonder" method="post" style="display: flex; gap: 5px;">
+                            <input type="hidden" name="id" value="@musteri.Id" />
+                            <input type="text" name="yanitMesaji" placeholder="Yanıt yazın..." class="form-control" required />
+                            <button type="submit" class="btn btn-success">Gönder</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-
-    <form asp-action="ServeCustomer" method="post">
-        <button type="submit" class="btn btn-danger">Sıradaki Müşteriyi Çağır</button>
-    </form>
 }
 
 <h2 class="mt-5">Tamamlanan Müşteriler</h2>
@@ -63,7 +67,7 @@ else
         connection.on("ReceiveRequest", function (ad, talep, siraNumarasi) {
             const table = document.getElementById("musteriTable").getElementsByTagName('tbody')[0];
             const newRow = table.insertRow();
-            newRow.innerHTML = `<td>${ad}</td><td>${talep}</td><td>${siraNumarasi}</td>`;
+            newRow.innerHTML = `<td>${ad}</td><td>${talep}</td><td>${siraNumarasi}</td><td></td>`;
         });
 
         connection.on("UpdateQueue", function () {

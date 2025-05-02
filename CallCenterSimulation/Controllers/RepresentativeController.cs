@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CallCenterSimulation.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +18,52 @@ namespace CallCenterSimulation.Controllers
             _hubContext = hubContext;
         }
 
+        public IActionResult Dashboard()
+        {
+            var musteriler = DataStore.MusteriKuyrugu.ElemanlariGetir()
+                .Select((m, i) =>
+                {
+                    m.SiraNumarasi = i + 1;
+                    return m;
+                }).ToList();
+
+            var tamamlanan = DataStore.TemsilciLoglari
+                .Select(log => new Customer { Ad = log, Talep = "" })
+                .ToList();
+
+            var vm = new DashboardViewModel
+            {
+                BekleyenMusteriler = musteriler,
+                TamamlananMusteriler = tamamlanan
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> YanitGonder(int id, string yanitMesaji)
+        {
+            var musteri = DataStore.MusteriKuyrugu.ElemanlariGetir().FirstOrDefault(m => m.Id == id);
+            if (musteri == null)
+                return RedirectToAction("Dashboard");
+
+            // Kuyruktan çıkar
+            DataStore.MusteriKuyrugu.KuyrukSil();
+
+            // Stack ve LinkedList güncellemeleri
+            DataStore.IslemGecmisi.Push($"{musteri.Ad} - {DateTime.Now}: {yanitMesaji}");
+            DataStore.TemsilciLoglari.AddLast($"{musteri.Ad}: {yanitMesaji} ({DateTime.Now})");
+
+            if (DataStore.AktifMusteriler.ContainsKey(musteri.Id))
+                DataStore.AktifMusteriler.Remove(musteri.Id);
+
+            // SignalR ile müşteriye mesaj gönder
+            await _hubContext.Clients.All.SendAsync("ReceiveResponse", musteri.Ad, yanitMesaji);
+            await _hubContext.Clients.All.SendAsync("UpdateQueue");
+
+            return RedirectToAction("Dashboard");
+        }
+
         public IActionResult Login()
         {
             return View();
@@ -32,76 +77,6 @@ namespace CallCenterSimulation.Controllers
 
             ViewBag.Hata = "Kullanıcı adı veya şifre yanlış!";
             return View();
-        }
-
-        public IActionResult Dashboard()
-        {
-            // Bekleyen müşteriler
-            var musteriler = DataStore.MusteriKuyrugu.ElemanlariGetir();
-
-            // Müşterilere sıra numarası ver (0'dan başlasın, sonra 1'e ekleyelim)
-            var musterilerWithSira = musteriler.Select((musteri, index) => {
-                musteri.SiraNumarasi = index + 1;  // 1'den başlatmak için 1 ekliyoruz
-                return musteri;
-            }).ToList();
-
-            // Tamamlanan müşteriler
-            var tamamlananMusteriler = DataStore.TemsilciLoglari
-                .Select(log => new Customer
-                {
-                    Id = 0, // Opsiyonel Id için bir değer verilebilir.
-                    Ad = log,
-                    Talep = ""
-                })
-                .ToList();
-
-            var viewModel = new DashboardViewModel
-            {
-                BekleyenMusteriler = musterilerWithSira, // Güncellenmiş listeyi kullanıyoruz
-                TamamlananMusteriler = tamamlananMusteriler
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ServeCustomer()
-        {
-            if (DataStore.MusteriKuyrugu.KuyrukBos())
-            {
-                // Kuyruk boşsa işlem yapılmaz
-                return RedirectToAction("Dashboard");
-            }
-
-            // Kuyruktan müşteri al
-            var musteri = DataStore.MusteriKuyrugu.KuyrukSil();
-
-            // Müşteriye sıra numarası ver
-            musteri.SiraNumarasi = DataStore.MusteriKuyrugu.ElemanlariGetir().Count + 1;
-
-            // Stack: geçmiş kaydını ekle
-            DataStore.IslemGecmisi.Push($"{musteri.Ad} - {DateTime.Now}: Talep işlendi.");
-
-            // LinkedList: temsilci logunu ekle
-            DataStore.TemsilciLoglari.AddLast($"Temsilci, {musteri.Ad} adlı müşterinin talebini işledi. ({DateTime.Now})");
-
-            // Dictionary: aktif müşteri kaldır
-            if (DataStore.AktifMusteriler.ContainsKey(musteri.Id))
-            {
-                DataStore.AktifMusteriler.Remove(musteri.Id);
-            }
-
-            // 1️⃣ "Talep işleniyor" mesajı gönder
-            await _hubContext.Clients.All.SendAsync("ReceiveResponse", musteri.Ad, "Talebiniz temsilci tarafından işleniyor...");
-
-            // 2️⃣ 2 saniye sonra tamamlandı mesajı gönder
-            await Task.Delay(2000);
-            await _hubContext.Clients.All.SendAsync("ReceiveResponse", musteri.Ad, "Talebiniz başarıyla tamamlandı!");
-
-            // 3️⃣ Kuyruk güncellemesi gönder
-            await _hubContext.Clients.All.SendAsync("UpdateQueue");
-
-            return RedirectToAction("Dashboard");
         }
     }
 }
