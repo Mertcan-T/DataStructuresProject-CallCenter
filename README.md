@@ -73,20 +73,6 @@ https://localhost:5001
 
 ---
 
-## 📷 Ekran Görüntüleri
-
-📌 Aşağıya ekran görüntüleri ekleyebilirsiniz:
-
-```
-wwwroot/screenshots/
-```
-
-Örnek:
-- Müşteri talep ekranı
-- Temsilci yanıt ekranı
-- Anket formu
-
----
 
 ## 🧠 Nasıl Çalışır?
 
