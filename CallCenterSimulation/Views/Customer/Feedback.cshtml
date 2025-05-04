@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Memnuniyet Anketi";
+    var ad = ViewBag.Ad as string;
+}
+
+<h2>Hizmet Memnuniyet Anketi</h2>
+
+<form asp-action="Feedback" method="post">
+    <input type="hidden" name="ad" value="@ad" />
+
+    <div class="form-group">
+        <label for="puan">Hizmet Puanınız (1 = Kötü, 5 = Mükemmel):</label>
+        <input type="number" name="puan" min="1" max="5" class="form-control" required />
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="geriBildirim">Görüşleriniz:</label>
+        <textarea name="geriBildirim" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Gönder</button>
+</form>

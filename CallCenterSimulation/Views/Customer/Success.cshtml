@@ -7,6 +7,12 @@
 <p id="sira" class="mb-3">Sıra numaranız hesaplanıyor...</p>
 
 <div id="yanitAlani" class="alert alert-info d-none mt-3"></div>
+<div id="anketButonu" class="mt-3 d-none">
+    <form asp-controller="Customer" asp-action="Feedback" method="get">
+        <input type="hidden" name="ad" value="@ad" />
+        <button type="submit" class="btn btn-success">Anketi Doldur</button>
+    </form>
+</div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
@@ -40,12 +46,8 @@
                 alan.classList.remove("d-none");
                 alan.innerHTML = `<strong>Temsilci Yanıtı:</strong> ${mesaj}`;
 
-                // Ek bilgi göstermek için içerik kontrolü
-                if (mesaj.toLowerCase().includes("alındı") || mesaj.toLowerCase().includes("tamamlandı")) {
-                    setTimeout(() => {
-                        alan.innerHTML += "<br><strong>Lütfen memnuniyet formunu doldurun.</strong>";
-                    }, 2000);
-                }
+                // Anket butonunu göster
+                document.getElementById("anketButonu").classList.remove("d-none");
             }
         });
 
