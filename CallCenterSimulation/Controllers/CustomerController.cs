@@ -24,11 +24,7 @@ namespace CallCenterSimulation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string ad, string talep)
         {
-            var musteri = new Customer
-            {
-                Ad = ad,
-                Talep = talep
-            };
+            var musteri = new Customer { Ad = ad, Talep = talep };
 
             // Kuyruğa ekle
             DataStore.MusteriKuyrugu.KuyrugaEkle(musteri);
@@ -51,44 +47,21 @@ namespace CallCenterSimulation.Controllers
             return View();
         }
 
-        // Cevap alındığında temsilci cevabını göster
+        // Müşteri geri bildirim gönderir
+        [HttpPost]
+        public IActionResult GeriBildirim(string ad, int puan)
+        {
+            DataStore.TemsilciLoglari.AddLast($"{DateTime.Now}: {ad} adlı müşteri {puan} puan verdi.");
+            TempData["GeriBildirildi"] = "Geri bildiriminiz için teşekkür ederiz!";
+            return RedirectToAction("Index");
+        }
+
+        // Cevap alınması için SignalR dinleyici ekliyoruz
         [HttpPost]
         public IActionResult ReceiveCustomerAnswer(string ad, string cevap)
         {
             TempData["TemsilciCevabi"] = cevap;
-            TempData["Ad"] = ad;
-            return View("SuccessWithAnswer");
-        }
-
-        // Geri bildirim formu gösterimi
-        [HttpGet]
-        public IActionResult Feedback()
-        {
-            var ad = TempData["Ad"]?.ToString();
-            var cevap = TempData["TemsilciCevabi"]?.ToString();
-            TempData.Keep("Ad");
-            TempData.Keep("TemsilciCevabi");
-
-            ViewBag.Ad = ad;
-            ViewBag.Cevap = cevap;
-
-            return View();
-        }
-
-        // Geri bildirimi alma ve kaydetme
-        [HttpPost]
-        public IActionResult Feedback(string ad, int puan, string geriBildirim)
-        {
-            var feedback = new CustomerFeedback
-            {
-                Ad = ad,
-                Puan = puan,
-                GeriBildirim = geriBildirim
-            };
-
-            DataStore.GeriBildirimler.Push(feedback);
-
-            return View("Thanks");
+            return RedirectToAction("Success");
         }
     }
 }
