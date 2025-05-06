@@ -2,6 +2,8 @@
 using CallCenterSimulation.Models;
 using CallCenterSimulation.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CallCenterSimulation.Controllers
 {
@@ -17,6 +19,12 @@ namespace CallCenterSimulation.Controllers
         // Müşteri formu
         public IActionResult Index()
         {
+            // Daha önce hata mesajı varsa göster
+            if (TempData["Hata"] != null)
+            {
+                ViewBag.Hata = TempData["Hata"].ToString();
+            }
+
             return View();
         }
 
@@ -24,6 +32,23 @@ namespace CallCenterSimulation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string ad, string talep)
         {
+            int hash = ad.GetHashCode();
+
+            // Eğer müşteri daha önce temsilci tarafından işleme alındıysa ama aynı adla tekrar gelmek istiyorsa,
+            // kuyrukta yoksa eski kaydı temizlemesine izin ver
+            if (DataStore.AktifMusteriler.ContainsKey(hash) &&
+                !DataStore.MusteriKuyrugu.ElemanlariGetir().Any(m => m.Ad == ad))
+            {
+                DataStore.AktifMusteriler.Remove(hash);
+            }
+
+            // Hâlâ aynı isimle kuyrukta olan bir müşteri varsa, uyarı ver
+            if (DataStore.MusteriKuyrugu.ElemanlariGetir().Any(m => m.Ad == ad))
+            {
+                TempData["Hata"] = "Bu isimle zaten bir talep var. Lütfen farklı bir isim giriniz.";
+                return RedirectToAction("Index");
+            }
+
             var musteri = new Customer
             {
                 Ad = ad,
@@ -34,12 +59,12 @@ namespace CallCenterSimulation.Controllers
             DataStore.MusteriKuyrugu.KuyrugaEkle(musteri);
 
             // Aktif müşterilere ekle (Dictionary)
-            DataStore.AktifMusteriler[ad.GetHashCode()] = musteri;
+            DataStore.AktifMusteriler[hash] = musteri;
 
-            // Kuyruk güncellendiğini tüm istemcilere bildir
+            // SignalR ile kuyruk güncellemesini bildir
             await _hubContext.Clients.All.SendAsync("UpdateQueue");
 
-            // TempData ile ad bilgisini Success sayfasına taşı
+            // Müşteri adını TempData ile Success ekranına taşı
             TempData["Ad"] = ad;
 
             return RedirectToAction("Success");
@@ -48,10 +73,11 @@ namespace CallCenterSimulation.Controllers
         // Talep başarıyla alındı sayfası
         public IActionResult Success()
         {
+            ViewBag.Ad = TempData["Ad"]?.ToString();
             return View();
         }
 
-        // Cevap alındığında temsilci cevabını göster
+        // Temsilciden müşteri cevabını al
         [HttpPost]
         public IActionResult ReceiveCustomerAnswer(string ad, string cevap)
         {
@@ -60,7 +86,7 @@ namespace CallCenterSimulation.Controllers
             return View("SuccessWithAnswer");
         }
 
-        // Geri bildirim formu gösterimi
+        // Geri bildirim formunu göster
         [HttpGet]
         public IActionResult Feedback()
         {
@@ -75,7 +101,7 @@ namespace CallCenterSimulation.Controllers
             return View();
         }
 
-        // Geri bildirimi alma ve kaydetme
+        // Geri bildirimi al ve sakla
         [HttpPost]
         public IActionResult Feedback(string ad, int puan, string geriBildirim)
         {
@@ -86,9 +112,8 @@ namespace CallCenterSimulation.Controllers
                 GeriBildirim = geriBildirim
             };
 
-            DataStore.GeriBildirimler.Push(feedback);
+            DataStore.GeriBildirimler.Push(feedback); // Stack yerine List kullanılmakta
 
-            // Modeli Thanks.cshtml sayfasına gönder
             return View("Thanks", feedback);
         }
     }

@@ -38,11 +38,18 @@
                                 <td>@musteri.Talep</td>
                                 <td>@musteri.SiraNumarasi</td>
                                 <td>
-                                    <form asp-action="YanitGonder" method="post" class="d-flex gap-2">
-                                        <input type="hidden" name="id" value="@musteri.Id" />
-                                        <input type="text" name="yanitMesaji" placeholder="Yanıt yazın..." class="form-control" required />
-                                        <button type="submit" class="btn btn-success">Gönder</button>
-                                    </form>
+                                    @if (musteri.SiraNumarasi == 1)
+                                    {
+                                        <form asp-action="YanitGonder" method="post" class="d-flex gap-2">
+                                            <input type="hidden" name="id" value="@musteri.Id" />
+                                            <input type="text" name="yanitMesaji" placeholder="Yanıt yazın..." class="form-control" required />
+                                            <button type="submit" class="btn btn-success">Gönder</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span>Bekliyor...</span>
+                                    }
                                 </td>
                             </tr>
                         }

@@ -43,17 +43,31 @@ namespace CallCenterSimulation.Controllers
         [HttpPost]
         public async Task<IActionResult> YanitGonder(int id, string yanitMesaji)
         {
+            // Kuyruğun ilk elemanını al
             var musteri = DataStore.MusteriKuyrugu.ElemanlariGetir().FirstOrDefault(m => m.Id == id);
+
+            // Müşteri var mı kontrol et
             if (musteri == null)
                 return RedirectToAction("Dashboard");
 
+            // Kuyruğun ilk elemanını kontrol et
+            var ilkMusteri = DataStore.MusteriKuyrugu.ElemanlariGetir().FirstOrDefault();
+
+            // Eğer gelen müşteri, kuyruğun ilk elemanı değilse, işlem yapılmasın
+            if (musteri != ilkMusteri)
+            {
+                // Eğer ilk müşteri dışında bir müşteri işlem yapmaya çalışıyorsa, uyarı ver
+                return RedirectToAction("Dashboard");
+            }
+
             // Kuyruktan çıkar
-            DataStore.MusteriKuyrugu.KuyrukSil();
+            DataStore.MusteriKuyrugu.KuyrukSil(); // İlk müşteri kuyruğundan çıkarılır
 
             // Stack ve LinkedList güncellemeleri
             DataStore.IslemGecmisi.Push($"{musteri.Ad} - {DateTime.Now}: {yanitMesaji}");
             DataStore.TemsilciLoglari.AddLast($"{musteri.Ad}: {yanitMesaji} ({DateTime.Now})");
 
+            // Müşteri aktif listeden çıkar
             if (DataStore.AktifMusteriler.ContainsKey(musteri.Id))
                 DataStore.AktifMusteriler.Remove(musteri.Id);
 

@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CallCenterSimulation projesi, müşteri taleplerinin yönetildiği bir çağrı merkezi simülasyonudur." />
+    <meta name="author" content="Adınız" />
     <title>@ViewData["Title"] - CallCenterSimulation</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -46,7 +48,7 @@
         footer {
             background-color: #343a40; /* Koyu gri */
             color: #ffffff;
-            padding: 15px 0;
+            padding: 25px 0; /* Dikey padding'i arttırarak görünümü iyileştirebilirsiniz */
             text-align: center;
             font-size: 0.9rem;
             margin-top: auto; /* Footer'ı en alta yerleştirmek için */
@@ -87,7 +89,7 @@
         }
 
         .nav-item {
-            margin-left: 20px;
+            margin-left: 15px; /* Aralığı biraz daha genişletebilirsiniz */
         }
 
             .nav-item:first-child {
@@ -140,7 +142,10 @@
                             <a class="nav-link" href="@Url.Action("Privacy", "Home")">Gizlilik Politikası</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Talep", "Customer")">Talep Sayfası</a>
+                            <a class="nav-link" href="@Url.Action("", "Customer")">Talep Sayfası</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Login", "Representative")">Personel Giriş</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

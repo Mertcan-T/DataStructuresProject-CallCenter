@@ -1,10 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Müşteri Talep Formu";
+    var hata = TempData["Hata"]?.ToString();
 }
 
 <div class="container mt-5">
     <div class="card shadow-lg p-5">
         <h2 class="text-center text-primary mb-4">Müşteri Talep Formu</h2>
+
+        @if (!string.IsNullOrEmpty(hata))
+        {
+            <div class="alert alert-danger text-center">@hata</div>
+        }
 
         <form asp-controller="Customer" asp-action="Create" method="post">
             <div class="form-group mb-3">
