@@ -2,7 +2,23 @@
     ViewData["Title"] = "Sıra Bilgisi";
 }
 
-<h2>Talebiniz Alındı!</h2>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
 
-<p>@ViewBag.Ad, teşekkür ederiz.</p>
-<p>Sıradaki numaranız: <strong>@ViewBag.Sira</strong></p>
+<div class="container mt-5">
+    <div class="card shadow-lg p-5 text-center bg-light">
+        <div class="mb-4">
+            <i class="fas fa-check-circle fa-3x text-success"></i>
+        </div>
+
+        <h2 class="text-success mb-3">Talebiniz Alındı!</h2>
+
+        <p class="lead text-dark">@ViewBag.Ad, teşekkür ederiz.</p>
+
+        <p class="fs-5 text-secondary mt-3">Sıradaki numaranız:</p>
+        <h1 class="display-3 text-primary fw-bold">@ViewBag.Sira</h1>
+
+        <div class="mt-4">
+            <a href="/" class="btn btn-outline-primary btn-lg">Ana Sayfaya Dön</a>
+        </div>
+    </div>
+</div>

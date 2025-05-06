@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,29 +7,140 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CallCenterSimulation.styles.css" asp-append-version="true" />
+
+    <!-- Özel Stil Eklemeleri -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa; /* Açık gri arka plan */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Sayfanın tüm yüksekliği */
+        }
+
+        header {
+            background-color: #007bff; /* Mavi tonları */
+            color: white;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        .navbar-nav .nav-link {
+            color: #f5f5f5 !important;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #ffffff !important;
+                background-color: #0056b3; /* Koyu mavi hover */
+                border-radius: 5px;
+            }
+
+        footer {
+            background-color: #343a40; /* Koyu gri */
+            color: #ffffff;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: auto; /* Footer'ı en alta yerleştirmek için */
+        }
+
+        .navbar-toggler-icon {
+            background-color: white;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        h1, h2 {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #28a745; /* Yeşil buton */
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #218838; /* Koyu yeşil hover */
+            }
+
+        .navbar-collapse {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nav-item {
+            margin-left: 20px;
+        }
+
+            .nav-item:first-child {
+                margin-left: 0;
+            }
+
+        .nav-link {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+            .nav-link:hover {
+                background-color: #0056b3;
+                border-radius: 4px;
+            }
+
+        .login-btn {
+            background-color: #28a745; /* Yeşil buton */
+            border: none;
+            width: 100%;
+            padding: 10px;
+            color: white;
+            font-size: 1.1rem;
+            border-radius: 5px;
+        }
+
+            .login-btn:hover {
+                background-color: #218838;
+            }
+
+        .nav-item:last-child {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CallCenterSimulation</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")">CallCenterSimulation</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">Ana Sayfa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" href="@Url.Action("Privacy", "Home")">Gizlilik Politikası</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="">Talep Sayfası</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Representative" asp-action="Login">Personel Giris</a>
+                            <a class="nav-link" href="@Url.Action("Talep", "Customer")">Talep Sayfası</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -37,17 +148,20 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- Telif Hakkı ve Footer -->
+    <footer>
         <div class="container">
-            &copy; 2025 - CallCenterSimulation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - CallCenterSimulation | <a href="@Url.Action("Privacy", "Home")" class="text-white">Gizlilik Politikası</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

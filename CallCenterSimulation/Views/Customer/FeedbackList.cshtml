@@ -1,0 +1,42 @@
+﻿@model List<CallCenterSimulation.Models.CustomerFeedback>
+
+@{
+    ViewData["Title"] = "Geri Bildirimler";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Müşteri Geri Bildirimleri</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <strong>Henüz geri bildirim yapılmamış.</strong>
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-info">Ad</th>
+                    <th class="text-info">Puan</th>
+                    <th class="text-info">Geri Bildirim</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var feedback in Model)
+                {
+                    <tr>
+                        <td>@feedback.Ad</td>
+                        <td>@feedback.Puan</td>
+                        <td>@feedback.GeriBildirim</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="text-center mt-4">
+        <a href="/Representative/Dashboard" class="btn btn-secondary btn-lg">Panele Dön</a>
+    </div>
+</div>

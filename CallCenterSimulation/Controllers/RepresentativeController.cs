@@ -78,5 +78,12 @@ namespace CallCenterSimulation.Controllers
             ViewBag.Hata = "Kullanıcı adı veya şifre yanlış!";
             return View();
         }
+
+        // GERİ BİLDİRİM LİSTESİ GÖRÜNTÜLEME
+        public IActionResult GeriBildirimListesi()
+        {
+            var liste = DataStore.GeriBildirimler.ToList(); // Stack'i listeye çevir
+            return View(liste); // Views/Representative/GeriBildirimListesi.cshtml kullanılacak
+        }
     }
 }

@@ -4,58 +4,75 @@
     ViewData["Title"] = "Temsilci Paneli";
 }
 
-<h2>Bekleyen Müşteriler</h2>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">👩‍💼 Temsilci Paneli</h1>
+        <a href="/Representative/GeriBildirimListesi" class="btn btn-outline-info">📝 Geri Bildirimleri Görüntüle</a>
+    </div>
 
-@if (!Model.BekleyenMusteriler.Any())
-{
-    <p>Bekleyen müşteri yok.</p>
-}
-else
-{
-    <table class="table" id="musteriTable">
-        <thead>
-            <tr>
-                <th>Ad</th>
-                <th>Talep</th>
-                <th>Sıra</th>
-                <th>Yanıt</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var musteri in Model.BekleyenMusteriler)
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">📞 Bekleyen Müşteriler</h4>
+        </div>
+        <div class="card-body p-0">
+            @if (!Model.BekleyenMusteriler.Any())
             {
-                <tr>
-                    <td>@musteri.Ad</td>
-                    <td>@musteri.Talep</td>
-                    <td>@musteri.SiraNumarasi</td>
-                    <td>
-                        <form asp-action="YanitGonder" method="post" style="display: flex; gap: 5px;">
-                            <input type="hidden" name="id" value="@musteri.Id" />
-                            <input type="text" name="yanitMesaji" placeholder="Yanıt yazın..." class="form-control" required />
-                            <button type="submit" class="btn btn-success">Gönder</button>
-                        </form>
-                    </td>
-                </tr>
+                <p class="p-3 text-muted">Şu anda bekleyen müşteri bulunmamaktadır.</p>
             }
-        </tbody>
-    </table>
-}
+            else
+            {
+                <table class="table table-hover m-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ad</th>
+                            <th>Talep</th>
+                            <th>Sıra</th>
+                            <th style="width: 40%;">Yanıt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var musteri in Model.BekleyenMusteriler)
+                        {
+                            <tr>
+                                <td>@musteri.Ad</td>
+                                <td>@musteri.Talep</td>
+                                <td>@musteri.SiraNumarasi</td>
+                                <td>
+                                    <form asp-action="YanitGonder" method="post" class="d-flex gap-2">
+                                        <input type="hidden" name="id" value="@musteri.Id" />
+                                        <input type="text" name="yanitMesaji" placeholder="Yanıt yazın..." class="form-control" required />
+                                        <button type="submit" class="btn btn-success">Gönder</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
 
-<h2 class="mt-5">Tamamlanan Müşteriler</h2>
-
-@if (!Model.TamamlananMusteriler.Any())
-{
-    <p>Henüz tamamlanan müşteri yok.</p>
-}
-else
-{
-    <ul>
-        @foreach (var log in Model.TamamlananMusteriler)
-        {
-            <li>@log.Ad</li>
-        }
-    </ul>
-}
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h4 class="mb-0">✅ Tamamlanan Müşteriler</h4>
+        </div>
+        <div class="card-body">
+            @if (!Model.TamamlananMusteriler.Any())
+            {
+                <p class="text-muted">Henüz tamamlanan müşteri yok.</p>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var log in Model.TamamlananMusteriler)
+                    {
+                        <li class="list-group-item">@log.Ad</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
@@ -65,9 +82,7 @@ else
             .build();
 
         connection.on("ReceiveRequest", function (ad, talep, siraNumarasi) {
-            const table = document.getElementById("musteriTable").getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
-            newRow.innerHTML = `<td>${ad}</td><td>${talep}</td><td>${siraNumarasi}</td><td></td>`;
+            location.reload();
         });
 
         connection.on("UpdateQueue", function () {

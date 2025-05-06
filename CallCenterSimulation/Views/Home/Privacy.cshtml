@@ -1,6 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Gizlilik Politikası";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container mt-5">
+    <div class="card shadow-lg p-4" style="border-radius: 20px;">
+        <h2 class="text-primary mb-4">@ViewData["Title"]</h2>
+
+        <p class="text-secondary">
+            Bu sayfa, kişisel bilgilerinizin nasıl toplandığı, kullanıldığı ve korunduğu hakkında bilgi vermek amacıyla hazırlanmıştır.
+        </p>
+
+        <h5 class="mt-4 text-dark">1. Bilgi Toplama</h5>
+        <p class="text-muted">
+            Sisteme giriş yaptığınızda adınız gibi bazı kişisel bilgiler toplanabilir. Bu bilgiler yalnızca sistemin düzgün çalışması amacıyla kullanılır.
+        </p>
+
+        <h5 class="mt-4 text-dark">2. Bilgilerin Kullanımı</h5>
+        <p class="text-muted">
+            Toplanan bilgiler, temsilci hizmetlerinin sağlanması, sıradaki müşterilerin yönetimi ve kullanıcı deneyiminin iyileştirilmesi için kullanılır.
+        </p>
+
+        <h5 class="mt-4 text-dark">3. Bilgi Güvenliği</h5>
+        <p class="text-muted">
+            Kişisel bilgileriniz, yetkisiz erişime karşı korunmaktadır. Sistem, veri güvenliğini sağlamak için çeşitli teknik ve idari önlemler kullanır.
+        </p>
+
+        <h5 class="mt-4 text-dark">4. İletişim</h5>
+        <p class="text-muted">
+            Gizlilik politikamızla ilgili herhangi bir sorunuz varsa lütfen bizimle iletişime geçin.
+        </p>
+
+        <a href="/" class="btn btn-outline-primary mt-4">Ana Sayfaya Dön</a>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #F0F8FF;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .text-muted {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-weight: 600;
+    }
+
+    .btn {
+        border-radius: 10px;
+    }
+</style>

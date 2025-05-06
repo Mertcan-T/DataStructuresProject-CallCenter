@@ -1,22 +1,62 @@
 ﻿@model dynamic
 
-<h2>Temsilci Girişi</h2>
+@{
+    ViewData["Title"] = "Temsilci Girişi";
+}
 
-<form asp-action="Login" method="post">
-    <div>
-        <label>Kullanıcı Adı:</label>
-        <input type="text" name="kullaniciAdi" required />
-    </div>
-    <div>
-        <label>Şifre:</label>
-        <input type="password" name="sifre" required />
-    </div>
-    <div>
-        <button type="submit">Giriş Yap</button>
-    </div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4 border-primary">
+                <h2 class="text-center text-primary mb-4">🔐 Temsilci Girişi</h2>
 
-    @if (ViewBag.Hata != null)
-    {
-        <p style="color:red;">@ViewBag.Hata</p>
+                <form asp-action="Login" method="post">
+                    <div class="form-group mb-3">
+                        <label for="kullaniciAdi" class="form-label text-dark">👤 Kullanıcı Adı:</label>
+                        <input type="text" name="kullaniciAdi" class="form-control" required placeholder="Kullanıcı adınızı girin" />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="sifre" class="form-label text-dark">🔑 Şifre:</label>
+                        <input type="password" name="sifre" class="form-control" required placeholder="Şifrenizi girin" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold">Giriş Yap</button>
+
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger text-center mt-3">
+                            @ViewBag.Hata
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #F3F7FA;
+        font-family: 'Segoe UI', sans-serif;
     }
-</form>
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+</style>

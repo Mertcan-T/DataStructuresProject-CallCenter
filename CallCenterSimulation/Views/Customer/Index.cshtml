@@ -2,18 +2,24 @@
     ViewData["Title"] = "Müşteri Talep Formu";
 }
 
-<h2>Müşteri Talep Formu</h2>
+<div class="container mt-5">
+    <div class="card shadow-lg p-5">
+        <h2 class="text-center text-primary mb-4">Müşteri Talep Formu</h2>
 
-<form asp-controller="Customer" asp-action="Create" method="post">
-    <div>
-        <label>Adınız:</label>
-        <input type="text" name="Ad" required />
+        <form asp-controller="Customer" asp-action="Create" method="post">
+            <div class="form-group mb-3">
+                <label for="Ad" class="text-info">Adınız:</label>
+                <input type="text" name="Ad" class="form-control" required placeholder="Adınızı girin" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Talep" class="text-info">Talebiniz:</label>
+                <input type="text" name="Talep" class="form-control" required placeholder="Talebinizi yazın..." />
+            </div>
+
+            <div class="form-group text-center mb-4">
+                <button type="submit" class="btn btn-success w-100">Talep Gönder</button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label>Talebiniz:</label>
-        <input type="text" name="Talep" required />
-    </div>
-    <div>
-        <button type="submit">Talep Gönder</button>
-    </div>
-</form>
+</div>

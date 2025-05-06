@@ -88,7 +88,8 @@ namespace CallCenterSimulation.Controllers
 
             DataStore.GeriBildirimler.Push(feedback);
 
-            return View("Thanks");
+            // Modeli Thanks.cshtml sayfasına gönder
+            return View("Thanks", feedback);
         }
     }
 }
