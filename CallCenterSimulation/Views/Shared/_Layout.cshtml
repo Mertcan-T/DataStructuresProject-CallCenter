@@ -3,149 +3,261 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="CallCenterSimulation projesi, müşteri taleplerinin yönetildiği bir çağrı merkezi simülasyonudur." />
-    <meta name="author" content="Adınız" />
-    <title>@ViewData["Title"] - CallCenterSimulation</title>
+    <meta name="description" content="Bursa Uludağ Üniversitesi Çağrı Merkezi - Öğrenci ve Personel Destek Sistemi" />
+    <meta name="author" content="Bursa Uludağ Üniversitesi" />
+    <title>@ViewData["Title"] - BUÜ Çağrı Merkezi</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CallCenterSimulation.styles.css" asp-append-version="true" />
 
-    <!-- Özel Stil Eklemeleri -->
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa; /* Açık gri arka plan */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh; /* Sayfanın tüm yüksekliği */
+        :root {
+            --primary-color: #003366; /* BUÜ Koyu Mavi */
+            --secondary-color: #004d99; /* BUÜ Açık Mavi */
+            --accent-color: #ffcc00; /* BUÜ Altın Sarısı */
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+            --text-primary: #333333;
+            --text-secondary: #666666;
         }
 
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Modern Navbar */
         header {
-            background-color: #007bff; /* Mavi tonları */
-            color: white;
+            background: var(--primary-color);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            padding: 0.5rem 0;
         }
 
         .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white !important;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
         }
 
         .navbar-nav .nav-link {
-            color: #f5f5f5 !important;
-            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            margin: 0 0.2rem;
+            font-size: 0.95rem;
         }
 
-            .navbar-nav .nav-link:hover {
-                color: #ffffff !important;
-                background-color: #0056b3; /* Koyu mavi hover */
-                border-radius: 5px;
-            }
-
-        footer {
-            background-color: #343a40; /* Koyu gri */
-            color: #ffffff;
-            padding: 25px 0; /* Dikey padding'i arttırarak görünümü iyileştirebilirsiniz */
-            text-align: center;
-            font-size: 0.9rem;
-            margin-top: auto; /* Footer'ı en alta yerleştirmek için */
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+            background-color: var(--secondary-color);
         }
 
-        .navbar-toggler-icon {
-            background-color: white;
+        .navbar-nav .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--primary-color) !important;
         }
 
+        /* Modern Container */
         .container {
-            margin-top: 40px;
+            max-width: 1200px;
+            padding: 2rem 1rem;
         }
 
+        /* Modern Cards */
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            background-color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            overflow: hidden;
         }
 
-        h1, h2 {
-            color: #333;
-            font-weight: bold;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modern Buttons */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
         }
 
         .btn-primary {
-            background-color: #28a745; /* Yeşil buton */
+            background-color: var(--primary-color);
             border: none;
         }
 
-            .btn-primary:hover {
-                background-color: #218838; /* Koyu yeşil hover */
-            }
-
-        .navbar-collapse {
-            display: flex;
-            justify-content: flex-end;
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
-        .nav-item {
-            margin-left: 15px; /* Aralığı biraz daha genişletebilirsiniz */
-        }
-
-            .nav-item:first-child {
-                margin-left: 0;
-            }
-
-        .nav-link {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-            .nav-link:hover {
-                background-color: #0056b3;
-                border-radius: 4px;
-            }
-
-        .login-btn {
-            background-color: #28a745; /* Yeşil buton */
+        .btn-success {
+            background-color: var(--success-color);
             border: none;
-            width: 100%;
-            padding: 10px;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            border: none;
+            color: var(--text-primary);
+        }
+
+        /* Modern Footer */
+        footer {
+            background-color: var(--primary-color);
             color: white;
-            font-size: 1.1rem;
-            border-radius: 5px;
+            padding: 2rem 0;
+            margin-top: auto;
+            font-size: 0.9rem;
         }
 
-            .login-btn:hover {
-                background-color: #218838;
+        footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-contact {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Responsive Design */
+        @@media screen and (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
             }
 
-        .nav-item:last-child {
-            margin-right: 10px;
+            .container {
+                padding: 1rem;
+            }
+
+            .card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeInAnimation 0.5s ease-in;
+        }
+
+        @@keyframes fadeInAnimation {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            background-color: var(--light-bg);
+            padding: 1rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .quick-links .nav-link {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .quick-links .nav-link:hover {
+            color: var(--primary-color);
         }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="@Url.Action("Index", "Home")">CallCenterSimulation</a>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                    <img src="~/img/uludag-logo.png" alt="Bursa Uludağ Üniversitesi Logo" style="height:48px; margin-right:12px;" />
+                    BURSA ULUDAĞ ÜNİVERSİTESİ
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Home")">Ana Sayfa</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">
+                                <i class="fas fa-home me-1"></i> Ana Sayfa
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Privacy", "Home")">Gizlilik Politikası</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Privacy" ? "active" : "")" href="@Url.Action("Privacy", "Home")">
+                                <i class="fas fa-shield-alt me-1"></i> Gizlilik
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("", "Customer")">Talep Sayfası</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" ? "active" : "")" href="@Url.Action("Index", "Customer")">
+                                <i class="fas fa-user-plus me-1"></i> Talep Oluştur
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Login", "Representative")">Personel Giriş</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Representative" ? "active" : "")" href="@Url.Action("Login", "Representative")">
+                                <i class="fas fa-user-tie me-1"></i> Personel Giriş
+                            </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -154,16 +266,52 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container fade-in">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <!-- Telif Hakkı ve Footer -->
     <footer>
         <div class="container">
-            &copy; 2025 - CallCenterSimulation | <a href="@Url.Action("Privacy", "Home")" class="text-white">Gizlilik Politikası</a>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="mb-3">İletişim</h5>
+                    <p class="mb-1">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Görükle Kampüsü, Nilüfer/Bursa
+                    </p>
+                    <p class="mb-1">
+                        <i class="fas fa-phone me-2"></i>
+                        0 (224) 294 00 00
+                    </p>
+                    <p class="mb-0">
+                        <i class="fas fa-envelope me-2"></i>
+                        iletisim@uludag.edu.tr
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Hızlı Bağlantılar</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#"><i class="fas fa-angle-right me-2"></i>Akademik Takvim</a></li>
+                        <li><a href="#"><i class="fas fa-angle-right me-2"></i>Kütüphane</a></li>
+                        <li><a href="#"><i class="fas fa-angle-right me-2"></i>Yemek Menüsü</a></li>
+                        <li><a href="#"><i class="fas fa-angle-right me-2"></i>E-posta</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Sosyal Medya</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-contact text-center">
+                <p class="mb-0">&copy; @DateTime.Now.Year - Bursa Uludağ Üniversitesi Çağrı Merkezi. Tüm hakları saklıdır.</p>
+            </div>
         </div>
     </footer>
 

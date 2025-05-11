@@ -6,23 +6,33 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg p-4 border-primary">
-                <h2 class="text-center text-primary mb-4">🔐 Temsilci Girişi</h2>
-
+        <div class="col-lg-6">
+            <div class="card shadow-lg p-5 border-0 rounded-4">
+                <div class="text-center mb-4">
+                    <div class="icon-wrapper mb-3 mx-auto">
+                        <i class="fas fa-lock fa-3x text-primary"></i>
+                    </div>
+                    <h2 class="fw-bold text-primary mb-2">Temsilci Girişi</h2>
+                    <p class="text-secondary mb-0">Yetkili personel girişi için bilgilerinizi girin.</p>
+                </div>
                 <form asp-action="Login" method="post">
-                    <div class="form-group mb-3">
-                        <label for="kullaniciAdi" class="form-label text-dark">👤 Kullanıcı Adı:</label>
-                        <input type="text" name="kullaniciAdi" class="form-control" required placeholder="Kullanıcı adınızı girin" />
-                    </div>
-
                     <div class="form-group mb-4">
-                        <label for="sifre" class="form-label text-dark">🔑 Şifre:</label>
-                        <input type="password" name="sifre" class="form-control" required placeholder="Şifrenizi girin" />
+                        <label for="kullaniciAdi" class="form-label text-primary fw-semibold">Kullanıcı Adı</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-user-tie"></i></span>
+                            <input type="text" name="kullaniciAdi" class="form-control border-start-0" required placeholder="Kullanıcı adınızı girin" />
+                        </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary w-100 fw-bold">Giriş Yap</button>
-
+                    <div class="form-group mb-4">
+                        <label for="sifre" class="form-label text-primary fw-semibold">Şifre</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-key"></i></span>
+                            <input type="password" name="sifre" class="form-control border-start-0" required placeholder="Şifrenizi girin" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">
+                        <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                    </button>
                     @if (ViewBag.Hata != null)
                     {
                         <div class="alert alert-danger text-center mt-3">
@@ -34,29 +44,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    body {
-        background-color: #F3F7FA;
-        font-family: 'Segoe UI', sans-serif;
-    }
-
-    .card {
-        border-radius: 12px;
-    }
-
-    .form-control {
-        border-radius: 8px;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        padding: 12px;
-        font-size: 16px;
-    }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-</style>
