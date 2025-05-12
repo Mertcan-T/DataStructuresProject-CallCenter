@@ -1,5 +1,7 @@
 # 📞 Call Center Simulation
 
+Proje github link : https://github.com/Mertcan-T/DataStructuresProject-CallCenter
+
 Bu proje, ASP.NET Core MVC ve SignalR kullanılarak geliştirilmiş bir **müşteri temsilcisi çağrı merkezi simülasyonudur**. Müşteriler sistem üzerinden taleplerini iletir, temsilciler bu talepleri sırayla cevaplar. Sistem, özelleştirilmiş veri yapıları ile çalışır ve tüm işlemler gerçek zamanlı olarak güncellenir.
 
 ---
