@@ -1,0 +1,115 @@
+﻿@model CallCenterSimulation.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Temsilci Paneli";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h1 class="fw-bold text-primary d-flex align-items-center gap-2" style="font-size:2.2rem;">
+            <span style="font-size:2.3rem;">👩‍💼</span> Temsilci Paneli
+        </h1>
+        <a href="/Representative/GeriBildirimListesi" class="btn btn-outline-primary fw-semibold px-4 py-2 shadow-sm d-flex align-items-center gap-2" style="border-radius:10px;">
+            <i class="fas fa-clipboard-list"></i> Geri Bildirimleri Görüntüle
+        </a>
+    </div>
+
+    <div class="card shadow-lg mb-5 border-0 rounded-4">
+        <div class="card-header bg-success text-white rounded-top-4 d-flex align-items-center gap-2" style="font-size:1.3rem;">
+            <i class="fas fa-phone-volume"></i>
+            <span class="fw-bold">Bekleyen Müşteriler</span>
+        </div>
+        <div class="card-body p-0">
+            @if (!Model.BekleyenMusteriler.Any())
+            {
+                <p class="p-4 text-muted">Şu anda bekleyen müşteri bulunmamaktadır.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover m-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ad</th>
+                                <th>Talep</th>
+                                <th>Sıra</th>
+                                <th style="width: 40%;">Yanıt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var musteri in Model.BekleyenMusteriler)
+                            {
+                                <tr>
+                                    <td>@musteri.Ad</td>
+                                    <td>@musteri.Talep</td>
+                                    <td>@musteri.SiraNumarasi</td>
+                                    <td>
+                                        @if (musteri.SiraNumarasi == 1)
+                                        {
+                                            <form asp-action="YanitGonder" method="post" class="d-flex gap-2">
+                                                <input type="hidden" name="id" value="@musteri.Id" />
+                                                <input type="text" name="yanitMesaji" placeholder="Yanıt yazın..." class="form-control" required style="border-radius:8px;" />
+                                                <button type="submit" class="btn btn-success px-4 fw-bold" style="border-radius:8px;">
+                                                    <i class="fas fa-paper-plane"></i> Gönder
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Bekliyor...</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card shadow-lg border-0 rounded-4 mb-5">
+        <div class="card-header bg-secondary text-white rounded-top-4 d-flex align-items-center gap-2" style="font-size:1.2rem;">
+            <i class="fas fa-check-square"></i>
+            <span class="fw-bold">Tamamlanan Müşteriler</span>
+        </div>
+        <div class="card-body">
+            @if (!Model.TamamlananMusteriler.Any())
+            {
+                <p class="text-muted">Henüz tamamlanan müşteri yok.</p>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var log in Model.TamamlananMusteriler)
+                    {
+                        <li class="list-group-item">@log.Ad</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/callCenterHub")
+            .build();
+
+        connection.on("ReceiveRequest", function (ad, talep, siraNumarasi) {
+            location.reload();
+        });
+
+        connection.on("UpdateQueue", function () {
+            location.reload();
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

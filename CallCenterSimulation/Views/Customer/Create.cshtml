@@ -1,0 +1,51 @@
+﻿@model CallCenterSimulation.Models.Customer
+
+@{
+    ViewBag.Title = "Müşteri Talep Oluştur";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-5">
+        <h2 class="text-center text-primary mb-4">Müşteri Talep Oluştur</h2>
+
+        <form method="post" asp-action="Create">
+            <!-- Ad Alanı -->
+            <div class="form-group mb-3">
+                <label for="Ad" class="text-info">Adınız:</label>
+                <input asp-for="Ad" class="form-control" required placeholder="Adınızı girin" />
+                <span asp-validation-for="Ad" style="color:red"></span>
+            </div>
+
+            <!-- Talep Alanı -->
+            <div class="form-group mb-3">
+                <label for="Talep" class="text-info">Talebiniz:</label>
+                <textarea asp-for="Talep" class="form-control" rows="4" required placeholder="Talebinizi yazın..."></textarea>
+                <span asp-validation-for="Talep" style="color:red"></span>
+            </div>
+
+            <!-- Gönder Butonu -->
+            <div class="form-group mb-4">
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-send"></i> Talep Gönder
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/callCenterHub")
+            .build();
+
+        connection.on("QueueUpdated", () => {
+            location.reload();
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
+}

@@ -1,0 +1,95 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Modern form stilleri ve responsive media query */
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 51, 102, 0.07);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card {
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+.form-label {
+    font-size: 1.1rem;
+}
+.input-group-text {
+    border-radius: 8px 0 0 8px;
+    border-right: 0;
+    color: #003366;
+    font-size: 1.2rem;
+}
+.form-control {
+    border-radius: 0 8px 8px 0;
+    border-left: 0;
+    font-size: 1.1rem;
+    transition: box-shadow 0.2s;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 2px #00336622;
+    border-color: #003366;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #003366 60%, #007bff 100%);
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, #007bff 60%, #003366 100%);
+    transform: translateY(-2px) scale(1.01);
+}
+@media (max-width: 768px) {
+    .card { padding: 2rem 1rem; }
+    .icon-wrapper { width: 56px; height: 56px; }
+}
+
+/* Slider ve responsive stiller */
+#buuSlider .slider-img { opacity: 0; position: absolute; left: 0; top: 0; }
+#buuSlider .slider-img.active { opacity: 1 !important; position: relative; z-index: 1; }
+#buuSlider { min-height: 180px; max-height: 260px; }
+@media (max-width: 768px) {
+    #buuSlider { height: 140px !important; max-height: 140px; }
+    #buuSlider .slider-img, #buuSlider .slider-img.active { height: 140px !important; }
+}
+
+/* Temsilci paneli modern stiller */
+.card { border-radius: 18px !important; }
+.card-header { border-radius: 18px 18px 0 0 !important; font-size: 1.15rem; }
+.table th, .table td { vertical-align: middle !important; }
+.btn-success, .btn-outline-primary { font-weight: 500; letter-spacing: 0.2px; }
+.btn-success { background: linear-gradient(90deg, #10b981 60%, #22c55e 100%); border: none; }
+.btn-success:hover { background: linear-gradient(90deg, #22c55e 60%, #10b981 100%); }
+.btn-outline-primary { border-width: 2px; }
+@media (max-width: 768px) {
+    .card { font-size: 0.98rem; }
+    h1 { font-size: 1.3rem !important; }
+    .btn { font-size: 0.98rem; }
+}

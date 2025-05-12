@@ -1,0 +1,27 @@
+﻿@model CallCenterSimulation.Models.CustomerFeedback
+
+@{
+    ViewData["Title"] = "Teşekkürler";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 bg-light p-5 text-center">
+        <div class="mb-4">
+            <i class="fas fa-check-circle fa-3x text-success"></i>
+        </div>
+
+        <h2 class="text-success mb-3">Teşekkürler, @Model.Ad!</h2>
+
+        <p class="fs-5"><strong>Puanınız:</strong> @Model.Puan</p>
+        <p class="fs-5"><strong>Geri Bildiriminiz:</strong></p>
+        <blockquote class="blockquote text-muted">
+            <p class="mb-0">"@Model.GeriBildirim"</p>
+        </blockquote>
+
+        <a class="btn btn-outline-primary mt-4" href="/Customer/Index">
+            <i class="fas fa-plus-circle me-2"></i>Yeni Talep Oluştur
+        </a>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />

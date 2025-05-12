@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Talep Alındı";
+    var ad = TempData["Ad"]?.ToString();
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-success">
+        <div class="card-body">
+            <h3 class="card-title text-success">Talebiniz Başarıyla Alındı</h3>
+            <p class="card-text">
+                Sayın <strong>@ad</strong>, talebiniz sisteme alınmıştır.
+            </p>
+            <p id="sira" class="text-muted">Sıra numaranız hesaplanıyor...</p>
+
+            <div id="yanitAlani" class="alert alert-info d-none mt-3"></div>
+
+            <div id="anketButonu" class="mt-4 d-none">
+                <form asp-controller="Customer" asp-action="Feedback" method="get">
+                    <input type="hidden" name="ad" value="@ad" />
+                    <button type="submit" class="btn btn-success">Memnuniyet Anketi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const kullaniciAd = "@ad";
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/callCenterHub")
+            .withAutomaticReconnect()
+            .build();
+
+        async function getQueuePosition() {
+            if (!kullaniciAd) return;
+            try {
+                const response = await fetch('/api/queue/position?name=' + encodeURIComponent(kullaniciAd));
+                if (response.ok) {
+                    const result = await response.text();
+                    document.getElementById("sira").innerText = "Sıra numaranız: " + result;
+                } else {
+                    document.getElementById("sira").innerText = "Sıra alınamadı.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById("sira").innerText = "Sıra alınamadı.";
+            }
+        }
+
+        connection.on("ReceiveResponse", function (ad, mesaj) {
+            if (ad === kullaniciAd) {
+                const alan = document.getElementById("yanitAlani");
+                alan.classList.remove("d-none");
+                alan.innerHTML = `<strong>Temsilci Yanıtı:</strong> ${mesaj}`;
+                document.getElementById("anketButonu").classList.remove("d-none");
+            }
+        });
+
+        connection.on("UpdateQueue", () => getQueuePosition());
+
+        connection.start().then(() => getQueuePosition());
+    </script>
+}
