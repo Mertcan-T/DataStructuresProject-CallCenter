@@ -9,7 +9,7 @@ namespace CallCenterSimulation.Models
         public static Stack<string> IslemGecmisi = new Stack<string>(); // İşlem geçmişi
         public static LinkedList<string> TemsilciLoglari = new LinkedList<string>(); // Temsilci logları
 
-        // YENİ: Müşteri geri bildirimleri
+        // Müşteri geri bildirimleri - Stack yapısı kullanıyoruz (LIFO)
         public static Stack<CustomerFeedback> GeriBildirimler = new Stack<CustomerFeedback>();
     }
 }

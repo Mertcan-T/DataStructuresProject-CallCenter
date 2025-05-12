@@ -7,41 +7,42 @@ namespace CallCenterSimulation.Models
 {
     public static class FeedbackStorage
     {
-        // Updated to use your custom file name
+        // File path for saving the feedback
         private static readonly string filePath = "customerFeedbackList.json";
 
-        public static List<CustomerFeedback> LoadFeedbacks()
+        // Load feedbacks from JSON and return a Stack
+        public static Stack<CustomerFeedback> LoadFeedbacks()
         {
             if (!File.Exists(filePath))
-                return new List<CustomerFeedback>(); // Return empty list if file doesn't exist
+                return new Stack<CustomerFeedback>();
 
-            var json = File.ReadAllText(filePath); // Read the JSON file
+            var json = File.ReadAllText(filePath);
             if (string.IsNullOrEmpty(json))
-                return new List<CustomerFeedback>(); // Return empty list if the file is empty
+                return new Stack<CustomerFeedback>();
 
             try
             {
-                // Make sure the JSON is an array of CustomerFeedback objects
-                return JsonConvert.DeserializeObject<List<CustomerFeedback>>(json) ?? new List<CustomerFeedback>();
+                var feedbackList = JsonConvert.DeserializeObject<List<CustomerFeedback>>(json) ?? new List<CustomerFeedback>();
+                feedbackList.Reverse(); // En son eklenenin en üstte olması için listeyi tersine çeviriyoruz
+                return new Stack<CustomerFeedback>(feedbackList);
             }
             catch (JsonException ex)
             {
-                // Log or handle the error here
                 Console.WriteLine($"Error deserializing JSON: {ex.Message}");
-                return new List<CustomerFeedback>(); // Return empty list in case of an error
+                return new Stack<CustomerFeedback>();
             }
         }
 
-
-        // Save a new feedback to the JSON file
+        // Save feedback to JSON file
         public static void SaveFeedback(CustomerFeedback feedback)
         {
-            // Load the existing feedbacks, add the new one, and then serialize back to the file
-            var feedbacks = LoadFeedbacks();
-            feedbacks.Add(feedback);
-            var json = JsonConvert.SerializeObject(feedbacks, Formatting.Indented);
+            var feedbackStack = LoadFeedbacks();
+            feedbackStack.Push(feedback); // Yeni geri bildirimi Stack'in üstüne ekliyoruz
+            
+            // Stack'i listeye çevirip JSON olarak kaydediyoruz
+            var feedbackList = new List<CustomerFeedback>(feedbackStack);
+            var json = JsonConvert.SerializeObject(feedbackList, Formatting.Indented);
             File.WriteAllText(filePath, json);
         }
     }
 }
-

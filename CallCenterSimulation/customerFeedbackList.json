@@ -1,13 +1,48 @@
 [
   {
     "Ad": null,
-    "Puan": 4,
-    "GeriBildirim": "teşekkür ederim "
+    "Puan": 3,
+    "GeriBildirim": "temsilci sayısı arttırılmalı."
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "Bu kadar hızlı cevap beklemiyordum."
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "hizmet kalitesi yüksekti"
+  },
+  {
+    "Ad": null,
+    "Puan": 2,
+    "GeriBildirim": "hizmeti beğenmedim"
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "Müşteri temsilcisi çok nazikti."
   },
   {
     "Ad": null,
     "Puan": 3,
-    "GeriBildirim": "orta"
+    "GeriBildirim": "ortalama bir hizmetti."
+  },
+  {
+    "Ad": null,
+    "Puan": 3,
+    "GeriBildirim": "daha anlaşılır bir cevap beklerdim"
+  },
+  {
+    "Ad": null,
+    "Puan": 2,
+    "GeriBildirim": "Cevap beni tatmin etmedi"
+  },
+  {
+    "Ad": null,
+    "Puan": 4,
+    "GeriBildirim": "teşekkür ederim "
   },
   {
     "Ad": null,
@@ -16,12 +51,37 @@
   },
   {
     "Ad": null,
-    "Puan": 4,
-    "GeriBildirim": "iyi"
+    "Puan": 1,
+    "GeriBildirim": "memnun değilim "
   },
   {
     "Ad": null,
-    "Puan": 1,
-    "GeriBildirim": "memnun değilim "
+    "Puan": 4,
+    "GeriBildirim": "Gayet memnun kaldım."
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "yardımınız için teşekkürler."
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "Sayenizde sorunumu çözdüm."
+  },
+  {
+    "Ad": null,
+    "Puan": 4,
+    "GeriBildirim": "önceki sefere göre daha iyi hizmet aldım."
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "hizmeti çok beğendim temsilci çok ilgiliydi"
+  },
+  {
+    "Ad": null,
+    "Puan": 5,
+    "GeriBildirim": "samimi geldi"
   }
 ]

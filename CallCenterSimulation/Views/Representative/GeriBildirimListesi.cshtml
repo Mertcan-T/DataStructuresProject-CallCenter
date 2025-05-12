@@ -16,17 +16,15 @@
     }
     else
     {
-        <div class="row">
+        <div class="list-group">
             @foreach (var feedback in Model)
             {
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm border-left-success">
-                        <div class="card-body">
-                            <h5 class="card-title text-success">@feedback.Ad</h5>
-                            <p class="mb-2"><strong>Puan:</strong> @feedback.Puan</p>
-                            <p class="mb-0"><strong>Geri Bildirim:</strong> @feedback.GeriBildirim</p>
-                        </div>
+                <div class="list-group-item mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0 text-success">@feedback.Ad</h5>
+                        <span class="badge bg-success">Puan: @feedback.Puan</span>
                     </div>
+                    <p class="mb-0">@feedback.GeriBildirim</p>
                 </div>
             }
         </div>

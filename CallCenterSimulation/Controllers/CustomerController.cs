@@ -95,17 +95,11 @@ namespace CallCenterSimulation.Controllers
             TempData.Keep("Ad");
             TempData.Keep("TemsilciCevabi");
 
-            // Get all feedbacks from the file
-            var allFeedbacks = FeedbackStorage.LoadFeedbacks();
-
-            // Pass the feedbacks to the view
             ViewBag.Ad = ad;
             ViewBag.Cevap = cevap;
-            ViewBag.AllFeedbacks = allFeedbacks;
-
+            
             return View();
         }
-
 
         // Geri bildirimi al ve sakla
         [HttpPost]
@@ -120,16 +114,18 @@ namespace CallCenterSimulation.Controllers
 
             // Save the feedback to the JSON file
             FeedbackStorage.SaveFeedback(feedback);
-
-            // Optional: Store feedback into DataStore (stack) for temporary session usage
+            
+            // Aynı zamanda geçici session kullanımı için DataStore'a da ekle
             DataStore.GeriBildirimler.Push(feedback);
 
             return View("Thanks", feedback);
         }
 
-
-
-
-
+        // Geri bildirimleri listele
+        public IActionResult FeedbackList()
+        {
+            var feedbackStack = FeedbackStorage.LoadFeedbacks();
+            return View(feedbackStack.ToList());
+        }
     }
 }

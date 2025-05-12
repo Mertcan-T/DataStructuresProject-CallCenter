@@ -96,9 +96,21 @@ namespace CallCenterSimulation.Controllers
         // GERİ BİLDİRİM LİSTESİ GÖRÜNTÜLEME
         public IActionResult GeriBildirimListesi()
         {
-            var liste = FeedbackStorage.LoadFeedbacks(); // Load from JSON file
-            return View(liste); // Will go to Views/Representative/GeriBildirimListesi.cshtml
+            // Stack'teki geri bildirimleri alıyoruz
+            var geriBildirimlerStack = FeedbackStorage.LoadFeedbacks();
+
+            // Stack'teki geri bildirimleri bir listeye dönüştürüyoruz
+            if (geriBildirimlerStack == null)
+            {
+                geriBildirimlerStack = new Stack<CustomerFeedback>(); // Stack boşsa yeni bir Stack oluştur
+            }
+
+            var geriBildirimlerList = geriBildirimlerStack.ToList(); // Stack'teki elemanları listeye çeviriyoruz
+
+            // Geri bildirimleri View'a gönderiyoruz
+            return View(geriBildirimlerList); // Listeyi View'a gönderiyoruz
         }
+
 
     }
 }
