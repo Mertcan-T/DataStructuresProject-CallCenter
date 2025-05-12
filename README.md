@@ -1,8 +1,13 @@
+
 # 📞 Call Center Simulation
 
 Proje github link : https://github.com/Mertcan-T/DataStructuresProject-CallCenter
 
-Bu proje, ASP.NET Core MVC ve SignalR kullanılarak geliştirilmiş bir **müşteri temsilcisi çağrı merkezi simülasyonudur**. Müşteriler sistem üzerinden taleplerini iletir, temsilciler bu talepleri sırayla cevaplar. Sistem, özelleştirilmiş veri yapıları ile çalışır ve tüm işlemler gerçek zamanlı olarak güncellenir.
+Bu proje, ASP.NET Core MVC mimarisi ve SignalR kütüphanesi kullanılarak geliştirilmiş gerçek zamanlı bir müşteri temsilcisi çağrı merkezi simülasyonudur. Gerçek hayattaki çağrı merkezlerinin işleyişini temel alarak tasarlanmış bu sistemde, müşteriler ad ve taleplerini girerek sisteme başvuru yapar. Başvurular, özel olarak geliştirilen bağlı liste tabanlı Kuyruk<T> veri yapısı ile FIFO (First-In First-Out) prensibine göre sıraya alınır.
+
+Temsilci ekranı, gelen talepleri anlık olarak takip eder ve sıradaki müşterinin isteğine özel yanıtlar verebilir. Temsilcinin gönderdiği yanıt, müşterinin ekranına gerçek zamanlı olarak ulaşır. Ayrıca, işlem tamamlandıktan sonra müşteriye bir memnuniyet anketi sunularak kullanıcıdan geri bildirim alınır.
+
+Bu projede klasik veritabanı sistemleri yerine tamamen in-memory (bellek içi) özel veri yapıları kullanılmıştır. Her veri yapısının kullanımı, kendi zaman ve alan avantajlarına göre seçilmiş ve sistemin uygun alanlarına entegre edilmiştir.
 
 ---
 
@@ -16,6 +21,25 @@ Bu proje, ASP.NET Core MVC ve SignalR kullanılarak geliştirilmiş bir **müşt
 - Aktif müşteri takibi (`Dictionary`)
 - İşlem geçmişi kayıtları (`LinkedList`)
 
+---
+
+## 🧠 Veri Yapıları ve Nedenleri
+
+| Veri Yapısı | Kullanım Amacı | Zaman Karmaşıklığı | Neden Bu Yapı? |
+|-------------|----------------|---------------------|----------------|
+| `Kuyruk<T>` | Müşteri taleplerini FIFO sırasıyla yönetmek | Ekleme: O(1), Silme: O(1) | FIFO sırasına en uygun yapı olduğu için tercih edildi. Alternatif sabit dizi yerine `linked list` tabanlı yapı ile dinamik boyut sağlandı. |
+| `Dictionary<int, Customer>` | Aktif müşterileri benzersiz şekilde takip etmek | Arama: O(1), Ekleme: O(1), Silme: O(1) | Aynı isimle tekrar başvuru yapılmasını engellemek için ideal. Benzersizliği ve hızlı erişimi garanti eder. |
+| `Stack<CustomerFeedback>` | Anketleri son giren ilk çıkar (LIFO) sırasıyla tutmak | Ekleme: O(1), Silme: O(1) | Geri bildirimleri en son yapılan işlem üzerinden hızlıca almak için uygundur. |
+| `LinkedList<string>` | Temsilcilerin işlem geçmişini zaman sırasına göre kaydetmek | Ekleme: O(1) | Zaman sıralı log tutmak için idealdir. Diziye göre daha az yeniden boyutlandırma gerektirir. |
+
+---
+## 🧠 Nasıl Çalışır?
+
+1. **Müşteri** adını ve talebini girerek kuyruğa girer.
+2. **Temsilci**, sıradaki müşteriyi çağırır ve cevap yazar.
+3. **SignalR**, tüm istemcilere kuyruk güncellemesini gerçek zamanlı gönderir.
+4. **Müşteri**, temsilci cevabını görür ve ardından anketi doldurur.
+5. Anketler bir `Stack` yapısında saklanır, önceki geri bildirimler istenirse görülebilir.
 ---
 
 ## 🛠 Kullanılan Teknolojiler
@@ -75,26 +99,15 @@ https://localhost:5001
 
 ---
 
+## 👥 Proje Katkıcıları
 
-## 🧠 Nasıl Çalışır?
-
-1. **Müşteri** adını ve talebini girerek kuyruğa girer.
-2. **Temsilci**, sıradaki müşteriyi çağırır ve cevap yazar.
-3. **SignalR**, tüm istemcilere kuyruk güncellemesini gerçek zamanlı gönderir.
-4. **Müşteri**, temsilci cevabını görür ve ardından anketi doldurur.
-5. Anketler bir `Stack` yapısında saklanır, önceki geri bildirimler istenirse görülebilir.
-
----
-
-## 🧪 Veri Yapıları
-
-| Veri Yapısı | Kullanım Amacı |
-|-------------|----------------|
-| `Kuyruk<T>` | Müşteri taleplerini FIFO sırasıyla yönetmek |
-| `Stack`     | Anket sonuçlarını geri dönüş sırasıyla saklamak |
-| `Dictionary`| Aktif müşterileri hızlı erişimle tutmak |
-| `LinkedList`| Temsilci işlem geçmişini zaman sırasına göre tutmak |
-
+| Öğrenci No | İsim |
+|------------|------|
+| 032290088  | ERDOĞAN TOPÇU |
+| 032290096  | SARAH AHMAD ALAYI |
+| 032290098  | SAHAR ZAR |
+| 032290109  | MUSTAFA ÖZTÜRK |
+| 032290113  | MERTCAN TAŞKIRAN |
 
 ---
 
@@ -102,5 +115,4 @@ https://localhost:5001
 
 Bu simülasyon, veritabanı kullanmadan sadece C# veri yapılarıyla oluşturulmuştur. Amaç, hem gerçek zamanlı sistem mantığını hem de veri yapılarının etkili kullanımını öğretmektir.
 
----
 
