@@ -93,11 +93,6 @@ https://localhost:5001
 | `Dictionary`| Aktif müşterileri hızlı erişimle tutmak |
 | `LinkedList`| Temsilci işlem geçmişini zaman sırasına göre tutmak |
 
----
-
-## 📄 Lisans
-
-Bu proje MIT lisansı ile lisanslanmıştır. Detaylı bilgi için `LICENSE` dosyasına göz atabilirsiniz.
 
 ---
 
@@ -107,10 +102,3 @@ Bu simülasyon, veritabanı kullanmadan sadece C# veri yapılarıyla oluşturulm
 
 ---
 
-## 📬 Geri Bildirim
-
-Her türlü öneri, geri bildirim veya katkı için lütfen `issues` sekmesini kullanın ya da bir `pull request` gönderin.
-
----
-
-**İyi kodlamalar! 💻🛠️**
